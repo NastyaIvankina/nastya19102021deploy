@@ -1,0 +1,16 @@
+{
+  "_version": "1.12.0",
+  "sap.app": {
+    "id": "19102021nastyadeploy",
+    "type": "application",
+    "applicationVersion": {
+      "version": "1.0.0"
+    }
+  },
+  "sap.ui": {
+    "technology": "URL"
+  },
+  "sap.cloud": {
+    "service": "nastya19102021"
+  }
+}

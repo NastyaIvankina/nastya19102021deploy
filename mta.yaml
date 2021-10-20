@@ -1,0 +1,81 @@
+_schema-version: "3.2"
+ID: nastya19102021deploy
+version: 0.0.1
+modules:
+- name: nastya19102021deploy-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: nastya19102021deploy-destination-service
+    parameters:
+      content-target: true
+  - name: nastya19102021deploy_html_repo_host
+    parameters:
+      service-key:
+        name: nastya19102021deploy_html_repo_host-key
+  - name: uaa_nastya19102021deploy
+    parameters:
+      service-key:
+        name: uaa_nastya19102021deploy-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: nastya19102021_nastya19102021deploy_html_repo_host
+          ServiceInstanceName: nastya19102021deploy-html5-app-host-service
+          ServiceKeyName: nastya19102021deploy_html_repo_host-key
+          sap.cloud.service: nastya19102021
+        - Authentication: OAuth2UserTokenExchange
+          Name: nastya19102021_uaa_nastya19102021deploy
+          ServiceInstanceName: nastya19102021deploy-xsuaa-service
+          ServiceKeyName: uaa_nastya19102021deploy-key
+          sap.cloud.service: nastya19102021
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: nastya19102021deploy_ui_deployer
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: nastya19102021deploy_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - nastya-deploy19102021.zip
+      name: nastya-deploy19102021
+      target-path: resources/
+- name: nastya-deploy19102021
+  type: html5
+  path: app/nastya-deploy19102021
+  build-parameters:
+    builder: custom
+    build-result: zipped
+    commands:
+    - npm install
+    - npm run build
+    supported-platforms: []
+resources:
+- name: nastya19102021deploy-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      version: 1.0.0
+    service: destination
+    service-name: nastya19102021deploy-destination-service
+    service-plan: lite
+- name: nastya19102021deploy_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: nastya19102021deploy-html5-app-host-service
+    service-plan: app-host
+- name: uaa_nastya19102021deploy
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: nastya19102021deploy-xsuaa-service
+    service-plan: application

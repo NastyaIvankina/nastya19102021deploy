@@ -1,0 +1,6 @@
+/mta_archives/
+/node_modules/
+/resources/
+app/nastya-deploy19102021/dist/
+app/nastya-deploy19102021/node_modules/
+Makefile_*
