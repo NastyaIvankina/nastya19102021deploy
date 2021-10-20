@@ -3,4 +3,5 @@
 /resources/
 app/nastya-deploy19102021/dist/
 app/nastya-deploy19102021/node_modules/
+app/nastya-deploy19102021/zipped/
 Makefile_*
