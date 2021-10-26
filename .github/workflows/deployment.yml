@@ -1,8 +1,7 @@
 name: Deploy to Cloud Foundry trial
 
 on:
-  workflow-dispatch:
-
+  workflow-dispatch
 jobs:
   deploy:
     runs-on: ubuntu-18.04
