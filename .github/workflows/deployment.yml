@@ -32,14 +32,7 @@ jobs:
     needs: build
     
     steps:
-      with:
-        cf_api: ${{ secrets.CF_TRIAL_API }}
-        cf_username: ${{ secrets.SAP_TRIAL_CF_USERNAME }}
-        cf_password: ${{ secrets.SAP_TRIAL_CF_PASSWORD }}
-        cf_orgname: ${{ secrets.CF_TRIAL_ORGNAME}}
-        cf_space: ${{ secrets.CF_TRIAL_SPACE }}
-        command: push -f manifest-dev.yml
          - name: CF Login
-           run: cf login -a cf_api -u cf_username -p cf_password -o cf_orgname -s cf_space
+           run: cf login -a ${{ secrets.CF_TRIAL_API }} -u ${{ secrets.SAP_TRIAL_CF_USERNAME }} -p ${{ secrets.SAP_TRIAL_CF_PASSWORD }} -o ${{ secrets.CF_TRIAL_ORGNAME}} -s ${{ secrets.CF_TRIAL_SPACE }}
         - name: Deploy to CF
           run: cf deploy ./mta_archives/nastya19102021deploy_0.0.1.mtar
