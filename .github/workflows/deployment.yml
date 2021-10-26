@@ -1,7 +1,7 @@
 name: Deploy to Cloud Foundry trial
 
 on:
-  workflow-dispatch
+  workflow-dispatch:
 
 jobs:
   build:
