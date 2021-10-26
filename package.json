@@ -2,8 +2,12 @@
     "name": "project",
     "version": "0.1.0",
     "private": true,
+    "scripts": {
+        "build":"mbt build"
+    },
     "devDependencies": {
         "@sap/approuter": "10.5.1",
-        "@sap/html5-repo-mock": "2.1.0"
+        "@sap/html5-repo-mock": "2.1.0",
+        "mbt": "^1.2.4"
     }
 }
