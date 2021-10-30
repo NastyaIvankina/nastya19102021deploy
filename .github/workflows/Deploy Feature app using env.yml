@@ -1,4 +1,4 @@
-name: Deploy Feature App
+name: Deploy Feature App ENV
 
 on: 
   workflow_dispatch:
