@@ -30,7 +30,10 @@ jobs:
       - name: Run NPM Build
         run: npm run build
       - name: CF Login to ISD
-        if: ${{ github.event.inputs.logLevel }} == 'ISD'
+        if: ${{ github.event.inputs.system }} == 'ISD'
         run: cf login -a ${{ secrets.CF_TRIAL_API }} -u ${{ secrets.SAP_TRIAL_CF_USERNAME }} -p ${{ secrets.SAP_TRIAL_CF_PASSWORD }} -o ${{ secrets.CF_TRIAL_ORGNAME }} -s ${{ secrets.CF_TRIAL_SPACE }}
+      - name: CF Login to IST
+        if: ${{ github.event.inputs.system }} == 'IST'
+        run: cf login -a ${{ secrets.CF_IST_TRIAL_API }} -u ${{ secrets.SAP_IST_TRIAL_CF_USERNAME }} -p ${{ secrets.SAP_IST_TRIAL_CF_PASSWORD }} -o ${{ secrets.CF_IST_TRIAL_ORGNAME }} -s ${{ secrets.CF_IST_TRIAL_SPACE }}
       - name: Deploy to CF
         run: cf deploy ./mta_archives/nastya19102021deploy_0.0.1.mtar
