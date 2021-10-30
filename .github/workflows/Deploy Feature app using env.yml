@@ -7,7 +7,8 @@ on:
         description: 'System ID (ISD, IST)'     
         required: true
 jobs:
-  init_parameters:
+  init:
+    runs-on: ubuntu-latest
     outputs:
       api_endpoint: ${{ steps.setvars.outputs.api_endpoint }}
       cf_username: ${{ steps.setvars.outputs.cf_username }}
@@ -36,8 +37,8 @@ jobs:
           fi
 
   deploy:
-    runs-on: ubuntu-18.04
-    needs: init_parameters
+    runs-on: ubuntu-latest
+    needs: init
     # Build your app here
     steps: 
      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
