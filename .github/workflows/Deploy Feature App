@@ -1,0 +1,36 @@
+name: Deploy Feature App
+
+on: 
+  workflow_dispatch:
+    inputs:
+      system:
+        description: 'System ID (ISD, IST)'     
+        required: true
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    # Build your app here
+    steps: 
+     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Run NPM Install
+        run: npm i
+      - name: Install CF CLI
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf7-cli
+      - name: Install MTA
+        run: |
+            cf install-plugin -f multiapps
+      - name: Run NPM Build
+        run: npm run build
+      - name: CF Login to ISD
+        if: ${{ github.event.inputs.logLevel }} == 'ISD'
+        run: cf login -a ${{ secrets.CF_TRIAL_API }} -u ${{ secrets.SAP_TRIAL_CF_USERNAME }} -p ${{ secrets.SAP_TRIAL_CF_PASSWORD }} -o ${{ secrets.CF_TRIAL_ORGNAME }} -s ${{ secrets.CF_TRIAL_SPACE }}
+      - name: Deploy to CF
+        run: cf deploy ./mta_archives/nastya19102021deploy_0.0.1.mtar
