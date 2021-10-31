@@ -8,7 +8,7 @@ on:
         required: true
 jobs:
   init:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     env: 
       API_ISD: ${{ secrets.CF_TRIAL_API }}
       ISD_USERNAME: ${{ secrets.SAP_TRIAL_CF_USERNAME }}
@@ -48,7 +48,7 @@ jobs:
           fi
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     needs: init
     # Build your app here
     steps: 
