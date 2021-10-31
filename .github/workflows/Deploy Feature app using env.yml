@@ -9,17 +9,6 @@ on:
 jobs:
   init:
     runs-on: ubuntu-latest
-    env: 
-      API_ISD: ${{ secrets.CF_TRIAL_API }}
-      ISD_USERNAME: ${{ secrets.SAP_TRIAL_CF_USERNAME }}
-      ISD_PASSWORD: ${{ secrets.SAP_TRIAL_CF_PASSWORD }}
-      ISD_ORGNAME: ${{ secrets.CF_TRIAL_ORGNAME }}
-      ISD_SPACE: ${{ secrets.CF_TRIAL_SPACE }}
-      API_IST: ${{ secrets.CF_IST_TRIAL_API }}
-      IST_USERNAME: ${{ secrets.SAP_IST_TRIAL_CF_USERNAME }}
-      IST_PASSWORD: ${{ secrets.SAP_IST_TRIAL_CF_PASSWORD }}
-      IST_ORGNAME: ${{ secrets.CF_IST_TRIAL_ORGNAME }}
-      IST_SPACE: ${{ secrets.CF_IST_TRIAL_SPACE }}
     outputs:
       api_endpoint: ${{ steps.setvars.outputs.api_endpoint }}
       cf_username: ${{ steps.setvars.outputs.cf_username }}
@@ -30,21 +19,32 @@ jobs:
     steps:
       - name: Set environment variables
         id: setvars
+        env: 
+          API_ISD: ${{ secrets.CF_TRIAL_API }}
+          ISD_USERNAME: ${{ secrets.SAP_TRIAL_CF_USERNAME }}
+          ISD_PASSWORD: ${{ secrets.SAP_TRIAL_CF_PASSWORD }}
+          ISD_ORGNAME: ${{ secrets.CF_TRIAL_ORGNAME }}
+          ISD_SPACE: ${{ secrets.CF_TRIAL_SPACE }}
+          API_IST: ${{ secrets.CF_IST_TRIAL_API }}
+          IST_USERNAME: ${{ secrets.SAP_IST_TRIAL_CF_USERNAME }}
+          IST_PASSWORD: ${{ secrets.SAP_IST_TRIAL_CF_PASSWORD }}
+          IST_ORGNAME: ${{ secrets.CF_IST_TRIAL_ORGNAME }}
+          IST_SPACE: ${{ secrets.CF_IST_TRIAL_SPACE }}
         run: |
           if [[ "${{ github.event.inputs.system == 'ISD' }}" ]]; then
-            echo "::set-output name=api_endpoint::${{ secrets.CF_TRIAL_API }}"
-            echo "::set-output name=cf_username::${{ secrets.SAP_TRIAL_CF_USERNAME }}"
-            echo "::set-output name=cf_password::${{ secrets.SAP_TRIAL_CF_PASSWORD }}"
-            echo "::set-output name=cf_orgname::${{ secrets.CF_TRIAL_ORGNAME }}"
-            echo "::set-output name=cf_space::${{ secrets.CF_TRIAL_SPACE }}"
+            echo "::set-output name=api_endpoint::$API_ISD"
+            echo "::set-output name=cf_username::$ISD_USERNAME"
+            echo "::set-output name=cf_password::$ISD_PASSWORD"
+            echo "::set-output name=cf_orgname::$ISD_ORGNAME"
+            echo "::set-output name=cf_space::$ISD_SPACE"
           fi
 
           if [[ "${{ github.event.inputs.system == 'IST' }}" ]]; then
-            echo "::set-output name=api_endpoint::${{ secrets.CF_IST_TRIAL_API }}"
-            echo "::set-output name=cf_username::${{ secrets.SAP_IST_TRIAL_CF_USERNAME }}"
-            echo "::set-output name=cf_password::${{ secrets.SAP_IST_TRIAL_CF_PASSWORD }}"
-            echo "::set-output name=cf_orgname::${{ secrets.CF_IST_TRIAL_ORGNAME }}"
-            echo "::set-output name=cf_space::${{ secrets.CF_IST_TRIAL_SPACE }}"
+            echo "::set-output name=api_endpoint::$API_IST"
+            echo "::set-output name=cf_username::$IST_USERNAME"
+            echo "::set-output name=cf_password::$IST_PASSWORD"
+            echo "::set-output name=cf_orgname::$IST_ORGNAME"
+            echo "::set-output name=cf_space::$IST_SPACE"
           fi
 
   deploy:
