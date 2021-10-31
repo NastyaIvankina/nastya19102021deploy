@@ -58,7 +58,7 @@ jobs:
         with:
           node-version: '14'
       - name: Run NPM Install
-        run: npm i
+        run: npm install
       - name: Install CF CLI
         run: |
           wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
