@@ -16,8 +16,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: Install MBT
-        run: npm install -g mbt
       - name: Run NPM Install
         run: npm i
       - name: Install CF CLI
