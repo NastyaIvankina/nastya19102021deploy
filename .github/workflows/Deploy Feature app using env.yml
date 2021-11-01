@@ -7,60 +7,60 @@ on:
         description: 'System ID (ISD, IST)'     
         required: true
 jobs:
-  init:
-    runs-on: ubuntu-18.04
-    env: 
-      API_ISD: ${{ secrets.CF_TRIAL_API }}
-      ISD_USERNAME: ${{ secrets.SAP_TRIAL_CF_USERNAME }}
-      ISD_PASSWORD: ${{ secrets.SAP_TRIAL_CF_PASSWORD }}
-      ISD_ORGNAME: ${{ secrets.CF_TRIAL_ORGNAME }}
-      ISD_SPACE: ${{ secrets.CF_TRIAL_SPACE }}
-      API_IST: ${{ secrets.CF_IST_TRIAL_API }}
-      IST_USERNAME: ${{ secrets.SAP_IST_TRIAL_CF_USERNAME }}
-      IST_PASSWORD: ${{ secrets.SAP_IST_TRIAL_CF_PASSWORD }}
-      IST_ORGNAME: ${{ secrets.CF_IST_TRIAL_ORGNAME }}
-      IST_SPACE: ${{ secrets.CF_IST_TRIAL_SPACE }}
-    outputs:
-      api_endpoint: ${{ steps.setvars.outputs.api_endpoint }}
-      cf_username: ${{ steps.setvars.outputs.cf_username }}
-      cf_password: ${{ steps.setvars.outputs.cf_password }}
-      cf_orgname: ${{ steps.setvars.outputs.cf_orgname }}
-      cf_space: ${{ steps.setvars.outputs.cf_space }}
+#   init:
+#     runs-on: ubuntu-18.04
+#     env: 
+#       API_ISD: ${{ secrets.CF_TRIAL_API }}
+#       ISD_USERNAME: ${{ secrets.SAP_TRIAL_CF_USERNAME }}
+#       ISD_PASSWORD: ${{ secrets.SAP_TRIAL_CF_PASSWORD }}
+#       ISD_ORGNAME: ${{ secrets.CF_TRIAL_ORGNAME }}
+#       ISD_SPACE: ${{ secrets.CF_TRIAL_SPACE }}
+#       API_IST: ${{ secrets.CF_IST_TRIAL_API }}
+#       IST_USERNAME: ${{ secrets.SAP_IST_TRIAL_CF_USERNAME }}
+#       IST_PASSWORD: ${{ secrets.SAP_IST_TRIAL_CF_PASSWORD }}
+#       IST_ORGNAME: ${{ secrets.CF_IST_TRIAL_ORGNAME }}
+#       IST_SPACE: ${{ secrets.CF_IST_TRIAL_SPACE }}
+#     outputs:
+#       api_endpoint: ${{ steps.setvars.outputs.api_endpoint }}
+#       cf_username: ${{ steps.setvars.outputs.cf_username }}
+#       cf_password: ${{ steps.setvars.outputs.cf_password }}
+#       cf_orgname: ${{ steps.setvars.outputs.cf_orgname }}
+#       cf_space: ${{ steps.setvars.outputs.cf_space }}
 
-    steps:
-      - name: Set environment variables
-        env: 
-          API_ISD: ${{ secrets.CF_TRIAL_API }}
-          ISD_USERNAME: ${{ secrets.SAP_TRIAL_CF_USERNAME }}
-          ISD_PASSWORD: ${{ secrets.SAP_TRIAL_CF_PASSWORD }}
-          ISD_ORGNAME: ${{ secrets.CF_TRIAL_ORGNAME }}
-          ISD_SPACE: ${{ secrets.CF_TRIAL_SPACE }}
-          API_IST: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_API }}
-          IST_USERNAME: ${{ secrets.SAP_${{ github.event.inputs.system }}_TRIAL_CF_USERNAME }}
-          IST_PASSWORD: ${{ secrets.SAP_${{ github.event.inputs.system }}_TRIAL_CF_PASSWORD }}
-          IST_ORGNAME: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_ORGNAME }}
-          IST_SPACE: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_SPACE }}
-        id: setvars
-        run: |
-          if [[ "${{ github.event.inputs.system == 'ISD' }}" ]]; then
-            echo "::set-output name=api_endpoint::${{ env.API_ISD }}"
-            echo "::set-output name=cf_username::${{ env.ISD_USERNAME }}"
-            echo "::set-output name=cf_password::${{ env.ISD_PASSWORD }}"
-            echo "::set-output name=cf_orgname::${{ env.ISD_ORGNAME }}"
-            echo "::set-output name=cf_space::${{ env.ISD_SPACE }}"
-          fi
+#     steps:
+#       - name: Set environment variables
+#         env: 
+#           API_ISD: ${{ secrets.CF_TRIAL_API }}
+#           ISD_USERNAME: ${{ secrets.SAP_TRIAL_CF_USERNAME }}
+#           ISD_PASSWORD: ${{ secrets.SAP_TRIAL_CF_PASSWORD }}
+#           ISD_ORGNAME: ${{ secrets.CF_TRIAL_ORGNAME }}
+#           ISD_SPACE: ${{ secrets.CF_TRIAL_SPACE }}
+#           API_IST: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_API }}
+#           IST_USERNAME: ${{ secrets.SAP_${{ github.event.inputs.system }}_TRIAL_CF_USERNAME }}
+#           IST_PASSWORD: ${{ secrets.SAP_${{ github.event.inputs.system }}_TRIAL_CF_PASSWORD }}
+#           IST_ORGNAME: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_ORGNAME }}
+#           IST_SPACE: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_SPACE }}
+#         id: setvars
+#         run: |
+#           if [[ "${{ github.event.inputs.system == 'ISD' }}" ]]; then
+#             echo "::set-output name=api_endpoint::${{ env.API_ISD }}"
+#             echo "::set-output name=cf_username::${{ env.ISD_USERNAME }}"
+#             echo "::set-output name=cf_password::${{ env.ISD_PASSWORD }}"
+#             echo "::set-output name=cf_orgname::${{ env.ISD_ORGNAME }}"
+#             echo "::set-output name=cf_space::${{ env.ISD_SPACE }}"
+#           fi
 
-          if [[ "${{ github.event.inputs.system == 'IST' }}" ]]; then
-            echo "::set-output name=api_endpoint::$API_IST"
-            echo "::set-output name=cf_username::$IST_USERNAME"
-            echo "::set-output name=cf_password::$IST_PASSWORD"
-            echo "::set-output name=cf_orgname::$IST_ORGNAME"
-            echo "::set-output name=cf_space::$IST_SPACE"
-          fi
+#           if [[ "${{ github.event.inputs.system == 'IST' }}" ]]; then
+#             echo "::set-output name=api_endpoint::$API_IST"
+#             echo "::set-output name=cf_username::$IST_USERNAME"
+#             echo "::set-output name=cf_password::$IST_PASSWORD"
+#             echo "::set-output name=cf_orgname::$IST_ORGNAME"
+#             echo "::set-output name=cf_space::$IST_SPACE"
+#           fi
 
   deploy:
     runs-on: ubuntu-18.04
-    needs: init
+#     needs: init
     # Build your app here
     steps: 
      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -82,6 +82,13 @@ jobs:
       - name: Run NPM Build
         run: npm run build
       - name: CF Login
-        run: cf login -a ${{ needs.init.outputs.api_endpoint }} -u ${{ needs.init.outputs.cf_username }} -p ${{ needs.init.outputs.cf_password }} -o ${{ needs.init.outputs.cf_orgname }} -s ${{ needs.init.outputs.cf_space }}}
+        env: 
+          API_IST: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_API }}
+          IST_USERNAME: ${{ secrets.SAP_${{ github.event.inputs.system }}_TRIAL_CF_USERNAME }}
+          IST_PASSWORD: ${{ secrets.SAP_${{ github.event.inputs.system }}_TRIAL_CF_PASSWORD }}
+          IST_ORGNAME: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_ORGNAME }}
+          IST_SPACE: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_SPACE }}
+#         run: cf login -a ${{ needs.init.outputs.api_endpoint }} -u ${{ needs.init.outputs.cf_username }} -p ${{ needs.init.outputs.cf_password }} -o ${{ needs.init.outputs.cf_orgname }} -s ${{ needs.init.outputs.cf_space }}
+          run: cf login -a $API_IST -u $IST_USERNAME -p $IST_PASSWORD -o $IST_ORGNAME -s $IST_SPACE
       - name: Deploy to CF
         run: cf deploy ./mta_archives/nastya19102021deploy_0.0.1.mtar
