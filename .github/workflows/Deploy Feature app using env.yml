@@ -7,62 +7,25 @@ on:
         description: 'System ID (ISD, IST)'     
         required: true
 jobs:
-#   init:
-#     runs-on: ubuntu-18.04
-#     env: 
-#       API_ISD: ${{ secrets.CF_TRIAL_API }}
-#       ISD_USERNAME: ${{ secrets.SAP_TRIAL_CF_USERNAME }}
-#       ISD_PASSWORD: ${{ secrets.SAP_TRIAL_CF_PASSWORD }}
-#       ISD_ORGNAME: ${{ secrets.CF_TRIAL_ORGNAME }}
-#       ISD_SPACE: ${{ secrets.CF_TRIAL_SPACE }}
-#       API_IST: ${{ secrets.CF_IST_TRIAL_API }}
-#       IST_USERNAME: ${{ secrets.SAP_IST_TRIAL_CF_USERNAME }}
-#       IST_PASSWORD: ${{ secrets.SAP_IST_TRIAL_CF_PASSWORD }}
-#       IST_ORGNAME: ${{ secrets.CF_IST_TRIAL_ORGNAME }}
-#       IST_SPACE: ${{ secrets.CF_IST_TRIAL_SPACE }}
-#     outputs:
-#       api_endpoint: ${{ steps.setvars.outputs.api_endpoint }}
-#       cf_username: ${{ steps.setvars.outputs.cf_username }}
-#       cf_password: ${{ steps.setvars.outputs.cf_password }}
-#       cf_orgname: ${{ steps.setvars.outputs.cf_orgname }}
-#       cf_space: ${{ steps.setvars.outputs.cf_space }}
-
-#     steps:
-#       - name: Set environment variables
-#         env: 
-#           API_ISD: ${{ secrets.CF_TRIAL_API }}
-#           ISD_USERNAME: ${{ secrets.SAP_TRIAL_CF_USERNAME }}
-#           ISD_PASSWORD: ${{ secrets.SAP_TRIAL_CF_PASSWORD }}
-#           ISD_ORGNAME: ${{ secrets.CF_TRIAL_ORGNAME }}
-#           ISD_SPACE: ${{ secrets.CF_TRIAL_SPACE }}
-#           API_IST: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_API }}
-#           IST_USERNAME: ${{ secrets.SAP_${{ github.event.inputs.system }}_TRIAL_CF_USERNAME }}
-#           IST_PASSWORD: ${{ secrets.SAP_${{ github.event.inputs.system }}_TRIAL_CF_PASSWORD }}
-#           IST_ORGNAME: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_ORGNAME }}
-#           IST_SPACE: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_SPACE }}
-#         id: setvars
-#         run: |
-#           if [[ "${{ github.event.inputs.system == 'ISD' }}" ]]; then
-#             echo "::set-output name=api_endpoint::${{ env.API_ISD }}"
-#             echo "::set-output name=cf_username::${{ env.ISD_USERNAME }}"
-#             echo "::set-output name=cf_password::${{ env.ISD_PASSWORD }}"
-#             echo "::set-output name=cf_orgname::${{ env.ISD_ORGNAME }}"
-#             echo "::set-output name=cf_space::${{ env.ISD_SPACE }}"
-#           fi
-
-#           if [[ "${{ github.event.inputs.system == 'IST' }}" ]]; then
-#             echo "::set-output name=api_endpoint::$API_IST"
-#             echo "::set-output name=cf_username::$IST_USERNAME"
-#             echo "::set-output name=cf_password::$IST_PASSWORD"
-#             echo "::set-output name=cf_orgname::$IST_ORGNAME"
-#             echo "::set-output name=cf_space::$IST_SPACE"
-#           fi
-
   deploy:
     runs-on: ubuntu-18.04
-#     needs: init
     # Build your app here
     steps: 
+    # Checks if system id provided correct, otherwise throw an error
+      - name: Check if wrong environment
+        if: ${{ github.event.inputs.system != 'ISD' && github.event.inputs.system != 'IST' }}
+        run: |
+            echo "Wrong environment set '${{ github.event.inputs.system }}': Choose 'ISD' or 'IST'"
+            exit 1
+    # Set subaccount (organization name) for dev environment
+      - name: Set environment variables for ISD
+        if: ${{ github.event.inputs.system == 'ISD' }}
+        run: |
+            echo "CF_API=${{ secrets.CF_TRIAL_API }}" >> $GITHUB_ENV
+            echo "CF_USERNAME=${{ secrets.SAP_TRIAL_CF_USERNAME }}" >> $GITHUB_ENV
+            echo "CF_PASSWORD=${{ secrets.SAP_TRIAL_CF_PASSWORD }}" >> $GITHUB_ENV
+            echo "CF_ORGNAME=${{ secrets.CF_TRIAL_ORGNAME }}" >> $GITHUB_ENV
+            echo "CF_SPACE=${{ secrets.CF_TRIAL_SPACE }}" >> $GITHUB_ENV
      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
