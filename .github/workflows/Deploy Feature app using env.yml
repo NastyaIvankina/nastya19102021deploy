@@ -88,7 +88,6 @@ jobs:
           IST_PASSWORD: ${{ secrets.SAP_${{ github.event.inputs.system }}_TRIAL_CF_PASSWORD }}
           IST_ORGNAME: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_ORGNAME }}
           IST_SPACE: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_SPACE }}
-#         run: cf login -a ${{ needs.init.outputs.api_endpoint }} -u ${{ needs.init.outputs.cf_username }} -p ${{ needs.init.outputs.cf_password }} -o ${{ needs.init.outputs.cf_orgname }} -s ${{ needs.init.outputs.cf_space }}
-          run: cf login -a $API_IST -u $IST_USERNAME -p $IST_PASSWORD -o $IST_ORGNAME -s $IST_SPACE
+        run: cf login -a $API_IST -u $IST_USERNAME -p $IST_PASSWORD -o $IST_ORGNAME -s $IST_SPACE
       - name: Deploy to CF
         run: cf deploy ./mta_archives/nastya19102021deploy_0.0.1.mtar
