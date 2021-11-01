@@ -29,6 +29,17 @@ jobs:
 
     steps:
       - name: Set environment variables
+        env: 
+          API_ISD: ${{ secrets.CF_TRIAL_API }}
+          ISD_USERNAME: ${{ secrets.SAP_TRIAL_CF_USERNAME }}
+          ISD_PASSWORD: ${{ secrets.SAP_TRIAL_CF_PASSWORD }}
+          ISD_ORGNAME: ${{ secrets.CF_TRIAL_ORGNAME }}
+          ISD_SPACE: ${{ secrets.CF_TRIAL_SPACE }}
+          API_IST: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_API }}
+          IST_USERNAME: ${{ secrets.SAP_${{ github.event.inputs.system }}_TRIAL_CF_USERNAME }}
+          IST_PASSWORD: ${{ secrets.SAP_${{ github.event.inputs.system }}_TRIAL_CF_PASSWORD }}
+          IST_ORGNAME: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_ORGNAME }}
+          IST_SPACE: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_SPACE }}
         id: setvars
         run: |
           if [[ "${{ github.event.inputs.system == 'ISD' }}" ]]; then
