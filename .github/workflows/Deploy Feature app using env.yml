@@ -83,11 +83,11 @@ jobs:
         run: npm run build
       - name: CF Login
         env: 
-          API_IST: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_API }}
-          IST_USERNAME: ${{ secrets.SAP_${{ github.event.inputs.system }}_TRIAL_CF_USERNAME }}
-          IST_PASSWORD: ${{ secrets.SAP_${{ github.event.inputs.system }}_TRIAL_CF_PASSWORD }}
-          IST_ORGNAME: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_ORGNAME }}
-          IST_SPACE: ${{ secrets.CF_${{ github.event.inputs.system }}_TRIAL_SPACE }}
+          API_IST: ${{ join('secrets.CF_',github.event.inputs.system,'_TRIAL_API') }}
+          IST_USERNAME: ${{ join('secrets.SAP_',github.event.inputs.system,'_TRIAL_CF_USERNAME') }}
+          IST_PASSWORD: ${{ join('secrets.SAP_',github.event.inputs.system,'_TRIAL_CF_PASSWORD') }}
+          IST_ORGNAME: ${{ join('secrets.CF_',github.event.inputs.system,'_TRIAL_ORGNAME') }}
+          IST_SPACE: ${{ join('secrets.CF_',github.event.inputs.system,'_TRIAL_SPACE') }}
         run: cf login -a $API_IST -u $IST_USERNAME -p $IST_PASSWORD -o $IST_ORGNAME -s $IST_SPACE
       - name: Deploy to CF
         run: cf deploy ./mta_archives/nastya19102021deploy_0.0.1.mtar
