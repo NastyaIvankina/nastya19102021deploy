@@ -1,0 +1,58 @@
+name: Deploy Feature App ENV
+
+on: 
+  workflow_dispatch:
+    inputs:
+      system:
+        description: 'System ID (ISD, IST)'     
+        required: true
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    # Build your app here
+    steps: 
+    # Checks if system id provided correct, otherwise throw an error
+      - name: Check if wrong environment
+        if: ${{ github.event.inputs.system != 'ISD' && github.event.inputs.system != 'IST' }}
+        run: |
+            echo "Wrong environment set '${{ github.event.inputs.system }}': Choose 'ISD' or 'IST'"
+            exit 1
+    # Set subaccount (organization name) for dev environment
+      - name: Set environment variables for ISD
+        if: ${{ github.event.inputs.system == 'ISD' }}
+        run: |
+            echo "CF_API=${{ secrets.CF_TRIAL_API }}" >> $GITHUB_ENV
+            echo "CF_USERNAME=${{ secrets.SAP_TRIAL_CF_USERNAME }}" >> $GITHUB_ENV
+            echo "CF_PASSWORD=${{ secrets.SAP_TRIAL_CF_PASSWORD }}" >> $GITHUB_ENV
+            echo "CF_ORGNAME=${{ secrets.CF_TRIAL_ORGNAME }}" >> $GITHUB_ENV
+            echo "CF_SPACE=${{ secrets.CF_TRIAL_SPACE }}" >> $GITHUB_ENV
+      - name: Set environment variables for IST
+        if: ${{ github.event.inputs.system == 'IST' }}
+        run: |
+            echo "CF_API=${{ secrets.CF_IST_TRIAL_API }}" >> $GITHUB_ENV
+            echo "CF_USERNAME=${{ secrets.SAP_IST_TRIAL_CF_USERNAME }}" >> $GITHUB_ENV
+            echo "CF_PASSWORD=${{ secrets.SAP_IST_TRIAL_CF_PASSWORD }}" >> $GITHUB_ENV
+            echo "CF_ORGNAME=${{ secrets.CF_IST_TRIAL_ORGNAME }}" >> $GITHUB_ENV
+            echo "CF_SPACE=${{ secrets.CF_IST_TRIAL_SPACE }}" >> $GITHUB_ENV
+     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Run NPM Install
+        run: npm install
+      - name: Install CF CLI
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf7-cli
+      - name: Install MTA
+        run: |
+            cf install-plugin -f multiapps
+      - name: Run NPM Build
+        run: npm run build
+      - name: CF Login
+        run: cf login -a $CF_API -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORGNAME -s $CF_SPACE
+      - name: Deploy to CF
+        run: cf deploy ./mta_archives/nastya19102021deploy_0.0.1.mtar
