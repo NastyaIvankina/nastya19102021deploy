@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { LuigiAngularSupportModule } from '@luigi-project/client-support-angular'
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import { AppRoutingModule } from './app-routing.module';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    LuigiAngularSupportModule
   ],
   providers: [],
   bootstrap: [AppComponent]

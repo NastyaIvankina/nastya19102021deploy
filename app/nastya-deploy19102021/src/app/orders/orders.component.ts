@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { linkManager, sendCustomMessage } from '@luigi-project/client';
+// import { linkManager, sendCustomMessage } from '@luigi-project/client';
+// import * as LuigiClient from '@luigi-project/client';
 
 @Component({
   selector: 'app-orders',
@@ -9,12 +10,13 @@ import { linkManager, sendCustomMessage } from '@luigi-project/client';
 export class OrdersComponent implements OnInit {
 
   constructor(
-    private linkManager : linkManager
+    // public linkManager : linkManager,
+    // public sendCustomMessage: sendCustomMessage
   ) { }
 
   ngOnInit(): void {
-    sendCustomMessage({ id: 'my-custom-message.changeConfig' });
-    this.linkManager().navigate('/orders');
+    // this.sendCustomMessage({ id: 'my-custom-message.changeConfig' });
+    // this.linkManager().navigate('/orders');
   }
 
 }
