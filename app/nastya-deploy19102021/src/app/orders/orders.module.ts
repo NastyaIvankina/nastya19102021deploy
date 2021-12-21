@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { OrdersRoutingModule } from './orders-routing.module';
 import { OrdersComponent } from './orders.component';
+import { LuigiNavigationService } from '../services/luigi-navigation.service';
 
 
 @NgModule({
@@ -14,4 +15,4 @@ import { OrdersComponent } from './orders.component';
     OrdersRoutingModule
   ]
 })
-export class OrdersModule { }
+export class OrdersModule {}
